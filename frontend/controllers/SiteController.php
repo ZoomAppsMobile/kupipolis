@@ -107,11 +107,14 @@ class SiteController extends Controller
     }
 
     public function actionCheck(){
-        if($_GET['pg_order_id'] == 101){
-            $paybox = new Paybox();
-            echo $paybox->cancel('Ошибка');
-            die;
-        }
+        $paybox = new Paybox();
+        echo $paybox->cancel('Ошибка');
+        die;
+//        if($_GET['pg_order_id'] == 101){
+//            $paybox = new Paybox();
+//            echo $paybox->cancel('Ошибка');
+//            die;
+//        }
     }
 
     public function actionResult(){
