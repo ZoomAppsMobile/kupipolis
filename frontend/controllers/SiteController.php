@@ -91,8 +91,8 @@ class SiteController extends Controller
         $paybox->order->id = 101;
         $paybox->order->description = 'test order';
         $paybox->order->amount = 10;
-        $paybox->config->checkUrl = "http://kupipolis.ibeacon.kz/site/check";
-        $paybox->config->resultUrl = "http://kupipolis.ibeacon.kz/site/result";
+        $paybox->config->checkUrl   = "http://kupipolis.ibeacon.kz/site/check";
+        $paybox->config->resultUrl  = "http://kupipolis.ibeacon.kz/site/result";
         $paybox->config->successUrl = "http://kupipolis.ibeacon.kz/site/success";
         $paybox->config->failureUrl = "http://kupipolis.ibeacon.kz/site/failure";
 
@@ -117,6 +117,9 @@ class SiteController extends Controller
     }
 
     public function actionResult(){
+        $paybox = new Paybox();
+        echo $paybox->cancel('Ошибка');
+        die;
         if($_GET['pg_can_reject'] != 1){
             $order = new PayOrder();
             $order->order_id = $_GET['pg_payment_id'];
