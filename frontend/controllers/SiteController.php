@@ -96,7 +96,7 @@ class SiteController extends Controller
         $paybox->config->successUrl = "http://kupipolis.ibeacon.kz/site/success";
         $paybox->config->failureUrl = "http://kupipolis.ibeacon.kz/site/failure";
 
-        $paybox->config->requestMethod = "GET";
+        $paybox->config->requestMethod    = "GET";
         $paybox->config->successUrlMethod = "GET";
         $paybox->config->failureUrlMethod = "GET";
 
@@ -108,7 +108,14 @@ class SiteController extends Controller
 
     public function actionCheck(){
         $paybox = new Paybox();
-        echo $paybox->cancel('Ошибка');
+        $request = $_GET;
+
+        if($paybox->checkSig($request)) {
+            echo $paybox->error('Description of error');
+            echo $paybox->waiting(600);
+            echo $paybox->cancel('Order was cancelled by phone');
+        }
+
         die;
 //        if($_GET['pg_order_id'] == 101){
 //            $paybox = new Paybox();
@@ -118,12 +125,11 @@ class SiteController extends Controller
     }
 
     public function actionResult(){
-        $order = new PayOrder();
-        $order->order_id = $_GET['pg_payment_id'];
-        $order->result = $_GET['pg_result'];
-        $order->save(false);
         if($_GET['pg_can_reject'] != 1){
-
+            $order = new PayOrder();
+            $order->order_id = $_GET['pg_payment_id'];
+            $order->result = $_GET['pg_result'];
+            $order->save(false);
         }else{
             $paybox = new Paybox();
             echo $paybox->cancel('Ошибка');
