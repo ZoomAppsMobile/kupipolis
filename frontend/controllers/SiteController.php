@@ -107,24 +107,20 @@ class SiteController extends Controller
     }
 
     public function actionCheck(){
-        $paybox = new Paybox();
-        echo $paybox->cancel('Ошибка');
-        die;
-//        if($_GET['pg_order_id'] == 101){
-//            $paybox = new Paybox();
-//            echo $paybox->cancel('Ошибка');
-//        }
+        if($_GET['pg_order_id'] == 101){
+            $paybox = new Paybox();
+            echo $paybox->cancel('Ошибка');
+            die;
+        }
     }
 
     public function actionResult(){
-        $paybox = new Paybox();
-        echo $paybox->cancel('Ошибка');
-        die;
+        $order = new PayOrder();
+        $order->order_id = $_GET['pg_payment_id'];
+        $order->result = $_GET['pg_result'];
+        $order->save(false);
         if($_GET['pg_can_reject'] != 1){
-            $order = new PayOrder();
-            $order->order_id = $_GET['pg_payment_id'];
-            $order->result = $_GET['pg_result'];
-            $order->save(false);
+
         }else{
             $paybox = new Paybox();
             echo $paybox->cancel('Ошибка');
