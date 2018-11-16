@@ -112,16 +112,16 @@ class SiteController extends Controller
     }
 
     public function actionResult(){
-//        if($_GET['pg_can_reject'] != 1){
-//            $order = new PayOrder();
-//            $order->order_id = $_GET['pg_payment_id'];
-//            $order->result = $_GET['pg_result'];
-//            $order->save(false);
-//        }else{
-//            $paybox = new Paybox();
-//            echo $paybox->cancel('Ошибка');
-//        }
-//        die;
+        if($_GET['pg_can_reject'] != 1){
+            $order = new PayOrder();
+            $order->order_id = $_GET['pg_payment_id'];
+            $order->result = $_GET['pg_result'];
+            $order->save(false);
+        }else{
+            $paybox = new Paybox();
+            echo $paybox->cancel('Ошибка');
+        }
+        die;
     }
 
     public function actionSuccess(){
