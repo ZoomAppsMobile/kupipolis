@@ -99,8 +99,8 @@ class SiteController extends Controller
         }
     }
 
-    public function actionResult($request){
-        var_dump($request);
+    public function actionResult(){
+//        var_dump($_REQUEST);
         die;
     }
 
