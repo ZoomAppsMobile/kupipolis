@@ -90,10 +90,8 @@ class SiteController extends Controller
         $paybox->order->id = 101;
         $paybox->order->description = 'test order';
         $paybox->order->amount = 10;
-
-        $config = new Config();
-
-        $config->resultUrl = "http://kupipolis.ibeacon.kz/site/result";
+        $paybox->config->resultUrl = "http://kupipolis.ibeacon.kz/site/result";
+        $paybox->config->successUrl = "http://kupipolis.ibeacon.kz/site/result";
 
         if($paybox->init()) {
             header('Location:' . $paybox->redirectUrl);
@@ -101,7 +99,7 @@ class SiteController extends Controller
         }
     }
 
-    public function Result(){
+    public function actionResult(){
         var_dump($_REQUEST);
         die;
     }
