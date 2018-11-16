@@ -108,20 +108,8 @@ class SiteController extends Controller
 
     public function actionCheck(){
         $paybox = new Paybox();
-        $request = $_GET;
-
-        if($paybox->checkSig($request)) {
-            echo $paybox->error('Description of error');
-            echo $paybox->waiting(600);
-            echo $paybox->cancel('Order was cancelled by phone');
-        }
-
+        echo $paybox->cancel('Order was cancelled by phone');
         die;
-//        if($_GET['pg_order_id'] == 101){
-//            $paybox = new Paybox();
-//            echo $paybox->cancel('Ошибка');
-//            die;
-//        }
     }
 
     public function actionResult(){
