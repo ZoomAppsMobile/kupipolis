@@ -1,6 +1,7 @@
 <?php
 namespace frontend\controllers;
 
+use app\models\PayOrder;
 use backend\models\GeocodeAutocomplete;
 use common\models\Countries;
 use Paybox\Pay\Models\Config;
@@ -91,8 +92,9 @@ class SiteController extends Controller
         $paybox->order->description = 'test order';
         $paybox->order->amount = 10;
         $paybox->config->resultUrl = "http://kupipolis.ibeacon.kz/site/result";
-        $paybox->config->successUrl = "http://kupipolis.ibeacon.kz/site/result";
+        $paybox->config->successUrl = "http://kupipolis.ibeacon.kz/site/result1";
         $paybox->config->successUrlMethod = "GET";
+        $paybox->config->requestMethod = "GET";
 
         if($paybox->init()) {
             header('Location:' . $paybox->redirectUrl);
@@ -101,7 +103,19 @@ class SiteController extends Controller
     }
 
     public function actionResult(){
-        var_dump($_GET);
+        $order = new PayOrder();
+        $order->order_id = $_GET['pg_payment_id'];
+        $order->result = $_GET['pg_result'];
+        $order->save(false);
+        die;
+    }
+
+    public function actionResult1(){
+        $order = PayOrder::find()->where("order_id = ".$_GET['pg_payment_id'])->one();
+        if($order->result == 1)
+            echo "Платеж успешно произведен";
+        else
+            echo "Что-то пошло не так";
         die;
     }
 
