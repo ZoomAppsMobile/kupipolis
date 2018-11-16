@@ -92,6 +92,7 @@ class SiteController extends Controller
         $paybox->order->amount = 10;
         $paybox->config->resultUrl = "http://kupipolis.ibeacon.kz/site/result";
         $paybox->config->successUrl = "http://kupipolis.ibeacon.kz/site/result";
+        $paybox->config->successUrlMethod = "GET";
 
         if($paybox->init()) {
             header('Location:' . $paybox->redirectUrl);
@@ -100,7 +101,7 @@ class SiteController extends Controller
     }
 
     public function actionResult(){
-//        var_dump($_REQUEST);
+        var_dump($_GET);
         die;
     }
 
