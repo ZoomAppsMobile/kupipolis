@@ -85,7 +85,8 @@ class SiteController extends Controller
     public function actionIndex()
     {
         $paybox = new Paybox();
-
+        echo $paybox->cancel('Ошибка');
+        die;
         $paybox->merchant->id = 510685;
         $paybox->merchant->secretKey = '3bv3l24JBCKIUBxK';
         $paybox->order->id = 101;
@@ -109,21 +110,20 @@ class SiteController extends Controller
 
     public function actionСheck(){
         $paybox = new Paybox();
-        echo $paybox->cancel('Ошибка');
-        die;
+        echo $paybox->cancel('Error');
     }
 
     public function actionResult(){
-        if($_GET['pg_can_reject'] != 1){
-            $order = new PayOrder();
-            $order->order_id = $_GET['pg_payment_id'];
-            $order->result = $_GET['pg_result'];
-            $order->save(false);
-        }else{
-            $paybox = new Paybox();
-            echo $paybox->cancel('Ошибка');
-        }
-        die;
+//        if($_GET['pg_can_reject'] != 1){
+//            $order = new PayOrder();
+//            $order->order_id = $_GET['pg_payment_id'];
+//            $order->result = $_GET['pg_result'];
+//            $order->save(false);
+//        }else{
+//            $paybox = new Paybox();
+//            echo $paybox->cancel('Ошибка');
+//        }
+//        die;
     }
 
     public function actionSuccess(){
