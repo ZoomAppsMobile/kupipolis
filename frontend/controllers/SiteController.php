@@ -91,10 +91,12 @@ class SiteController extends Controller
         $paybox->order->id = 101;
         $paybox->order->description = 'test order';
         $paybox->order->amount = 10;
+        $paybox->config->checkUrl = "http://kupipolis.ibeacon.kz/site/check";
         $paybox->config->resultUrl = "http://kupipolis.ibeacon.kz/site/result";
         $paybox->config->successUrl = "http://kupipolis.ibeacon.kz/site/success";
         $paybox->config->failureUrl = "http://kupipolis.ibeacon.kz/site/failure";
 
+        $paybox->config->checkUrlMethod = "GET";
         $paybox->config->requestMethod = "GET";
         $paybox->config->successUrlMethod = "GET";
         $paybox->config->failureUrlMethod = "GET";
@@ -103,6 +105,12 @@ class SiteController extends Controller
             header('Location:' . $paybox->redirectUrl);
             die;
         }
+    }
+
+    public function actionСheck(){
+        $paybox = new Paybox();
+        echo $paybox->cancel('Ошибка');
+        die;
     }
 
     public function actionResult(){
