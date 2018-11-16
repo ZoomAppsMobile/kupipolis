@@ -85,8 +85,7 @@ class SiteController extends Controller
     public function actionIndex()
     {
         $paybox = new Paybox();
-        echo $paybox->cancel('Ошибка');
-        die;
+
         $paybox->merchant->id = 510685;
         $paybox->merchant->secretKey = '3bv3l24JBCKIUBxK';
         $paybox->order->id = 101;
@@ -97,7 +96,6 @@ class SiteController extends Controller
         $paybox->config->successUrl = "http://kupipolis.ibeacon.kz/site/success";
         $paybox->config->failureUrl = "http://kupipolis.ibeacon.kz/site/failure";
 
-        $paybox->config->checkUrlMethod = "GET";
         $paybox->config->requestMethod = "GET";
         $paybox->config->successUrlMethod = "GET";
         $paybox->config->failureUrlMethod = "GET";
