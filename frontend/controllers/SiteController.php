@@ -3,6 +3,7 @@ namespace frontend\controllers;
 
 use backend\models\GeocodeAutocomplete;
 use common\models\Countries;
+use Paybox\Pay\Models\Config;
 use VK\Client\VKApiClient;
 use VK\OAuth\Scopes\VKOAuthUserScope;
 use VK\OAuth\VKOAuth;
@@ -20,6 +21,7 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
+use Paybox\Pay\Facade as Paybox;
 
 /**
  * Site controller
@@ -79,6 +81,30 @@ class SiteController extends Controller
      * @return mixed
      */
 
+    public function actionIndex()
+    {
+        $paybox = new Paybox();
+
+        $paybox->merchant->id = 510685;
+        $paybox->merchant->secretKey = '3bv3l24JBCKIUBxK';
+        $paybox->order->id = 101;
+        $paybox->order->description = 'test order';
+        $paybox->order->amount = 10;
+
+        $config = new Config();
+
+        $config->resultUrl = "http://kupipolis.ibeacon.kz/site/result";
+
+        if($paybox->init()) {
+            header('Location:' . $paybox->redirectUrl);
+            die;
+        }
+    }
+
+    public function Result(){
+        var_dump($_REQUEST);
+        die;
+    }
 
     public function generateRandomString($length = 30)
     {
@@ -91,102 +117,102 @@ class SiteController extends Controller
         return $randomString;
     }
 
-    public function actionIndex()
-    {
-//        $vk = new VKApiClient();
+//    public function actionIndex()
+//    {
+////        $vk = new VKApiClient();
+////
+////        $oauth = new VKOAuth();
+////        $client_id = 6744108;
+////        $redirect_uri = 'http://bliz.kz/site/api';
+////        $display = VKOAuthDisplay::PAGE;
+////        $scope = array(VKOAuthUserScope::WALL, VKOAuthUserScope::GROUPS);
+////        $state = 'secret_state_code';
+////
+////        $browser_url = $oauth->getAuthorizeUrl(VKOAuthResponseType::CODE, $client_id, $redirect_uri, $display, $scope, $state);
+////
+////        $oauth = new VKOAuth();
+////        $client_id = 6744108;
+////        $client_secret = '2xa7ry4Qgvuen08pPjso';
+////        $redirect_uri = 'http://bliz.kz/site/api';
+////        $code = '2b8b9e9d57f9785771';
+////
+////        $response = $oauth->getAccessToken($client_id, $client_secret, $redirect_uri, $code);
+////        $access_token = $response['access_token'];
+////
+////        $vk = new VKApiClient();
+////        $response = $vk->database()->getCities($access_token, array(//Города
+////            'country_id' => 4,
+////            'region_id' => 1702873,
+//////            'offset' => 1000,
+////            'count' => 1000,
+////            'version' => 5.87,
+////        ));
+////
+////        foreach ($response['items'] as $k => $v){
+////            $model = new GeocodeAutocomplete();
+////            $model->place_id = $this->generateRandomString();
+////            $model->description = $v['title'];
+////            $model->parent_id = 1702873;
+////            $model->oblast = $v['region'];
+////            $model->region = 0;
+////            $model->save(false);
+////        }
 //
-//        $oauth = new VKOAuth();
-//        $client_id = 6744108;
-//        $redirect_uri = 'http://bliz.kz/site/api';
-//        $display = VKOAuthDisplay::PAGE;
-//        $scope = array(VKOAuthUserScope::WALL, VKOAuthUserScope::GROUPS);
-//        $state = 'secret_state_code';
+////        $response = $vk->database()->getRegions($access_token, array(
+////            'country_id' => 4,
+////            'count' => 1000,
+////            'version' => 5.87,
+////        ));
 //
-//        $browser_url = $oauth->getAuthorizeUrl(VKOAuthResponseType::CODE, $client_id, $redirect_uri, $display, $scope, $state);
+//        echo '<pre>'.print_r($response, true).'</pre>';
 //
-//        $oauth = new VKOAuth();
-//        $client_id = 6744108;
-//        $client_secret = '2xa7ry4Qgvuen08pPjso';
-//        $redirect_uri = 'http://bliz.kz/site/api';
-//        $code = '2b8b9e9d57f9785771';
+//        die;
+////        var_dump($browser_url);die;
+////        $data = \moonland\phpexcel\Excel::import('1.xlsx');
+////
+////        foreach ($data as $v)
+////            foreach ($v as $v1) {
+////                $model = new Countries();
+////                $model->country_id = $v1[782668573];
+////                $model->name = $v1['Абхазия'];
+////                $model->type = $v1[1];
+////                $model->save();
+////            }
+////
+////        echo '<pre>'.print_r($data, true).'</pre>';die;
 //
-//        $response = $oauth->getAccessToken($client_id, $client_secret, $redirect_uri, $code);
-//        $access_token = $response['access_token'];
+//        $client = new Client();
 //
-//        $vk = new VKApiClient();
-//        $response = $vk->database()->getCities($access_token, array(//Города
-//            'country_id' => 4,
-//            'region_id' => 1702873,
-////            'offset' => 1000,
-//            'count' => 1000,
-//            'version' => 5.87,
-//        ));
+//        $json = '{
+//"Shops": [
+//{
+//"Name": "Магазин  Сейфуллина"
+//}
+//],
+//"Goods groups": [
 //
-//        foreach ($response['items'] as $k => $v){
-//            $model = new GeocodeAutocomplete();
-//            $model->place_id = $this->generateRandomString();
-//            $model->description = $v['title'];
-//            $model->parent_id = 1702873;
-//            $model->oblast = $v['region'];
-//            $model->region = 0;
-//            $model->save(false);
-//        }
-
-//        $response = $vk->database()->getRegions($access_token, array(
-//            'country_id' => 4,
-//            'count' => 1000,
-//            'version' => 5.87,
-//        ));
-
-        echo '<pre>'.print_r($response, true).'</pre>';
-
-        die;
-//        var_dump($browser_url);die;
-//        $data = \moonland\phpexcel\Excel::import('1.xlsx');
-//
-//        foreach ($data as $v)
-//            foreach ($v as $v1) {
-//                $model = new Countries();
-//                $model->country_id = $v1[782668573];
-//                $model->name = $v1['Абхазия'];
-//                $model->type = $v1[1];
-//                $model->save();
-//            }
-//
-//        echo '<pre>'.print_r($data, true).'</pre>';die;
-
-        $client = new Client();
-
-        $json = '{
-"Shops": [
-{
-"Name": "Магазин  Сейфуллина"
-}
-],
-"Goods groups": [
-
-],
-"Goods": [
-{
-"Name": "Jeu`Demeure Rose Hand Cream",
-"Code": "OFC00000055",
-"Group code": "РТ000004075",
-"Price": 0
-}
-]
-}';
-$json = '';
-//        $username = 'myv1';
-//        $password = 'qqqq';
-        $response = $client->createRequest()
-            ->setMethod('POST')
-            ->setUrl('http://asian-cosmetics/api')
-//            ->setData(["username" => $username,'password' => $password, 'json' => $json])
-            ->setData(['json' => $json])
-            ->send();
-        echo '<pre>'. print_r($response, true). '</pre>';die;
-        return $this->render('index');
-    }
+//],
+//"Goods": [
+//{
+//"Name": "Jeu`Demeure Rose Hand Cream",
+//"Code": "OFC00000055",
+//"Group code": "РТ000004075",
+//"Price": 0
+//}
+//]
+//}';
+//$json = '';
+////        $username = 'myv1';
+////        $password = 'qqqq';
+//        $response = $client->createRequest()
+//            ->setMethod('POST')
+//            ->setUrl('http://asian-cosmetics/api')
+////            ->setData(["username" => $username,'password' => $password, 'json' => $json])
+//            ->setData(['json' => $json])
+//            ->send();
+//        echo '<pre>'. print_r($response, true). '</pre>';die;
+//        return $this->render('index');
+//    }
 
     /**
      * Logs in a user.
