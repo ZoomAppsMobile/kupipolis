@@ -92,9 +92,12 @@ class SiteController extends Controller
         $paybox->order->description = 'test order';
         $paybox->order->amount = 10;
         $paybox->config->resultUrl = "http://kupipolis.ibeacon.kz/site/result";
-        $paybox->config->successUrl = "http://kupipolis.ibeacon.kz/site/result1";
-        $paybox->config->successUrlMethod = "GET";
+        $paybox->config->successUrl = "http://kupipolis.ibeacon.kz/site/success";
+        $paybox->config->failureUrl = "http://kupipolis.ibeacon.kz/site/failure";
+
         $paybox->config->requestMethod = "GET";
+        $paybox->config->successUrlMethod = "GET";
+        $paybox->config->failureUrlMethod = "GET";
 
         if($paybox->init()) {
             header('Location:' . $paybox->redirectUrl);
@@ -103,20 +106,24 @@ class SiteController extends Controller
     }
 
     public function actionResult(){
-        $order = new PayOrder();
-        $order->order_id = $_GET['pg_payment_id'];
-        $order->result = $_GET['pg_result'];
-        $order->save(false);
+        if($_GET['pg_can_reject'] != 1){
+            $order = new PayOrder();
+            $order->order_id = $_GET['pg_payment_id'];
+            $order->result = $_GET['pg_result'];
+            $order->save(false);
+        }else{
+            $paybox = new Paybox();
+            echo $paybox->cancel('Ошибка');
+        }
         die;
     }
 
-    public function actionResult1(){
-        $order = PayOrder::find()->where("order_id = ".$_GET['pg_payment_id'])->one();
-        if($order->result == 1)
-            echo "Платеж успешно произведен";
-        else
-            echo "Что-то пошло не так";
-        die;
+    public function actionSuccess(){
+        echo "Платеж успешно произведен";
+    }
+
+    public function actionFailure(){
+        echo "Платеж отменен";
     }
 
     public function generateRandomString($length = 30)
